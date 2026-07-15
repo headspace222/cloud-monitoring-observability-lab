@@ -70,7 +70,8 @@ if ($KeyVaultName) {
 if ($AutomationAccountName) {
     Write-Host "`nAutomation Account: $AutomationAccountName ..." -ForegroundColor Cyan
     $aa = Get-AzAutomationAccount -ResourceGroupName $AutomationAccountRG -Name $AutomationAccountName
-    $results += Enable-DiagSetting -ResourceId $aa.ResourceId -SettingName "diag-to-observability-workspace" -Categories @("JobLogs", "JobStreams") -Description "Automation Account ($AutomationAccountName) job logs"
+    $aaResourceId = "/subscriptions/$($aa.SubscriptionId)/resourceGroups/$($aa.ResourceGroupName)/providers/Microsoft.Automation/automationAccounts/$($aa.AutomationAccountName)"
+    $results += Enable-DiagSetting -ResourceId $aaResourceId -SettingName "diag-to-observability-workspace" -Categories @("JobLogs", "JobStreams") -Description "Automation Account ($AutomationAccountName) job logs"
 }
 
 if ($DataFactoryName) {
