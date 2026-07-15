@@ -49,7 +49,7 @@ diagnostic logs are genuinely free to export at this lab's data volume.
 ## Cost
 
 - **Log Analytics workspace**: a genuine always-free monthly ingestion grant
-  covers this lab's data volume comfortably - see `docs/architecture.md` for
+  covers this lab's data volume comfortably - see [`docs/architecture.md`](docs/architecture.md) for
   the exact allowance
 - **Diagnostic settings**: no charge for the setting itself, only for the
   data it sends (covered by the free grant above)
