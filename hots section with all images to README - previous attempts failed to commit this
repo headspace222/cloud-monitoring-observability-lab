@@ -1,0 +1,68 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex b44a832..bf09446 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -58,6 +58,30 @@[m [mdiagnostic logs are genuinely free to export at this lab's data volume.[m
+   same honest caveat used elsewhere in this portfolio - not part of the[m
+   guaranteed-free core scope[m
+ [m
+[32m+[m[32m## Screenshots[m
+[32m+[m
+[32m+[m[32mEvidence of the shared workspace, diagnostic settings, live query results, and the final Workbook, captured against a live Azure subscription during this build. Files live in `docs/screenshots/`.[m
+[32m+[m
+[32m+[m[32m**1. Log Analytics Workspace Created**[m
+[32m+[m[32m![Workspace created](docs/screenshots/01-workspace-created.png)[m
+[32m+[m[32mThe shared workspace provisioned, confirmed with `Sku: PerGB2018` (the tier that includes the always-free ingestion grant) and `ProvisioningState: Succeeded`.[m
+[32m+[m
+[32m+[m[32m**2. Diagnostic Settings Summary**[m
+[32m+[m[32m![Diagnostic settings summary](docs/screenshots/02-diagnostic-settings-summary.png)[m
+[32m+[m[32mAll five source resources wired into the shared workspace - including the Automation Account, fixed after discovering `Get-AzAutomationAccount` doesn't expose a `.ResourceId` property on this module version and building the resource ID manually instead.[m
+[32m+[m
+[32m+[m[32m**3. Diagnostic Setting Confirmed in Portal**[m
+[32m+[m[32m![Diagnostic setting portal view](docs/screenshots/03-diagnostic-setting-portal-view.png)[m
+[32m+[m[32mThe Key Vault's diagnostic setting confirmed directly in its own portal blade - belt-and-braces evidence alongside the PowerShell verification, showing `AuditEvent` routed to the shared workspace.[m
+[32m+[m
+[32m+[m[32m**4. Live KQL Query Results**[m
+[32m+[m[32m![KQL query results](docs/screenshots/04-kql-query-results.png)[m
+[32m+[m[32mReal Key Vault audit events, queried straight out of the shared workspace - proof the data pipeline works end to end, from resource to diagnostic setting to queryable log.[m
+[32m+[m
+[32m+[m[32m**5. Observability Workbook**[m
+[32m+[m[32m![Workbook dashboard](docs/screenshots/05-workbook-dashboard.png)[m
+[32m+[m[32mThe finished dashboard showing Automation job history (Created -> Started -> Completed) pulled directly from the shared workspace, visualised outside any single resource's own portal blade.[m
+[32m+[m
+ ## Setup Guide[m
+ [m
+ Full steps: [`docs/setup-guide.md`](docs/setup-guide.md).[m
+[36m@@ -76,6 +100,32 @@[m [mFull steps: [`docs/setup-guide.md`](docs/setup-guide.md).[m
+ - **Portfolio-level thinking**: treating five separate projects as parts of[m
+   one environment worth monitoring together, not five unrelated exercises[m
+ [m
+[32m+[m[32m## Conclusion[m
+[32m+[m
+[32m+[m[32mThis capstone set out to prove something the other five projects in this[m
+[32m+[m[32mportfolio only implied: that they add up to a single, coherent environment[m
+[32m+[m[32mworth operating as one, not five disconnected exercises. That's genuinely[m
+[32m+[m[32mdemonstrated here - a shared Log Analytics workspace pulling real telemetry[m
+[32m+[m[32mfrom storage, Key Vault, Azure Automation, and Data Factory resources built[m
+[32m+[m[32macross four earlier projects, queried through KQL that answers actual[m
+[32m+[m[32moperational questions, and visualised in a Workbook that didn't exist until[m
+[32m+[m[32mthis project connected the dots.[m
+[32m+[m
+[32m+[m[32mThe build also surfaced one more real platform quirk to add to this[m
+[32m+[m[32mportfolio's running list: `Get-AzAutomationAccount` doesn't expose a[m
+[32m+[m[32m`.ResourceId` property on the installed module version, requiring the[m
+[32m+[m[32mresource ID to be constructed manually from its component parts - the same[m
+[32m+[m[32mcategory of SDK/module inconsistency that's shown up repeatedly across this[m
+[32m+[m[32mbody of work, each time diagnosed properly rather than worked around blindly.[m
+[32m+[m[32mThat diagnostic discipline is, at this point, as much the point of this[m
+[32m+[m[32mportfolio as any individual Azure service.[m
+[32m+[m
+[32m+[m[32mSeven projects, seven different angles - identity, cost, migration, data[m
+[32m+[m[32mpipelines, backup and recovery, security posture and secrets, and now[m
+[32m+[m[32mobservability tying the other six together - all built on a genuinely free[m
+[32m+[m[32mAzure subscription, all documented with the real obstacles included rather[m
+[32m+[m[32mthan edited out. That's the portfolio.[m
+[32m+[m
+ ## Author[m
+ [m
+ Jane - Cloud & Infrastructure Engineer, AZ-104 candidate.[m
