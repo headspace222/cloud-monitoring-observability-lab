@@ -1,0 +1,20 @@
+// Failed Operations, Last 24 Hours - Across All Connected Resources
+//
+// Table names below reflect the "Resource specific" diagnostic setting
+// destination type. If configured with "Azure diagnostics" destination
+// instead, check your workspace's Tables list and adjust accordingly.
+
+union isfuzzy=true
+    (StorageBlobLogs
+        | where TimeGenerated > ago(24h)
+        | where StatusText != "Success"
+        | project TimeGenerated, Source="StorageBlobLogs", Detail=StatusText, ResourceId=AccountName),
+    (ADFPipelineRun
+        | where TimeGenerated > ago(24h)
+        | where Status == "Failed"
+        | project TimeGenerated, Source="ADFPipelineRun", Detail=Status, ResourceId=PipelineName),
+    (ADFActivityRun
+        | where TimeGenerated > ago(24h)
+        | where Status == "Failed"
+        | project TimeGenerated, Source="ADFActivityRun", Detail=Status, ResourceId=ActivityName)
+| order by TimeGenerated desc

@@ -1,0 +1,14 @@
+// Resource Activity Heartbeat - Staleness Check
+
+let lookback = 7d;
+union isfuzzy=true
+    (ADFPipelineRun
+        | where TimeGenerated > ago(lookback)
+        | summarize LastSeen=max(TimeGenerated) by Source="Data Factory Pipeline", Name=PipelineName),
+    (AzureDiagnostics
+        | where TimeGenerated > ago(lookback)
+        | where ResourceProvider == "MICROSOFT.AUTOMATION"
+        | where Category == "JobLogs"
+        | summarize LastSeen=max(TimeGenerated) by Source="Automation Runbook", Name=RunbookName_s)
+| extend HoursSinceLastSeen = datetime_diff('hour', now(), LastSeen)
+| order by HoursSinceLastSeen desc

@@ -1,0 +1,9 @@
+// Automation Runbook Job Failures
+
+AzureDiagnostics
+| where TimeGenerated > ago(7d)
+| where ResourceProvider == "MICROSOFT.AUTOMATION"
+| where Category == "JobLogs"
+| where ResultType == "Failed" or Exception_s != ""
+| project TimeGenerated, RunbookName_s, ResultType, ResultDescription, Exception_s
+| order by TimeGenerated desc

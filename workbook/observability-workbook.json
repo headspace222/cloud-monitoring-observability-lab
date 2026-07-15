@@ -1,0 +1,56 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "## Monitoring & Observability Capstone\n\nReplace <WORKSPACE_RESOURCE_ID> below with your actual workspace Resource ID."
+      },
+      "name": "text - title"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union isfuzzy=true\n    (StorageBlobLogs | where TimeGenerated > ago(24h) | where StatusText != \"Success\" | project TimeGenerated, Source=\"StorageBlobLogs\", Detail=StatusText, ResourceId=AccountName),\n    (ADFPipelineRun | where TimeGenerated > ago(24h) | where Status == \"Failed\" | project TimeGenerated, Source=\"ADFPipelineRun\", Detail=Status, ResourceId=PipelineName)\n| order by TimeGenerated desc",
+        "size": 0,
+        "timeContext": { "durationMs": 86400000 },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [ "<WORKSPACE_RESOURCE_ID>" ],
+        "visualization": "table"
+      },
+      "name": "query - failed operations last 24h"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ADFPipelineRun\n| where TimeGenerated > ago(7d)\n| summarize TotalRuns=count(), Failed=countif(Status==\"Failed\"), Succeeded=countif(Status==\"Succeeded\") by PipelineName\n| extend SuccessRate = round(100.0 * Succeeded / TotalRuns, 1)",
+        "size": 0,
+        "timeContext": { "durationMs": 604800000 },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [ "<WORKSPACE_RESOURCE_ID>" ],
+        "visualization": "table"
+      },
+      "name": "query - pipeline success rate 7d"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AZKeyVaultAuditEvent\n| where TimeGenerated > ago(7d)\n| where OperationName in (\"SecretGet\", \"SecretSet\", \"SecretList\")\n| summarize AccessCount=count() by OperationName, bin(TimeGenerated, 1d)\n| order by TimeGenerated desc",
+        "size": 0,
+        "timeContext": { "durationMs": 604800000 },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [ "<WORKSPACE_RESOURCE_ID>" ],
+        "visualization": "barchart"
+      },
+      "name": "query - key vault access volume 7d"
+    }
+  ],
+  "fallbackResourceIds": [],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

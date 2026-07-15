@@ -1,0 +1,15 @@
+// Data Factory Pipeline and Activity Failures
+
+ADFPipelineRun
+| where TimeGenerated > ago(7d)
+| where Status in ("Failed", "Cancelled")
+| project TimeGenerated, PipelineName, Status, Parameters, RunId
+| order by TimeGenerated desc
+
+// Companion query for activity-level detail, filter to a specific RunId:
+//
+// ADFActivityRun
+// | where TimeGenerated > ago(7d)
+// | where PipelineRunId == "<RunId from above>"
+// | where Status == "Failed"
+// | project TimeGenerated, ActivityName, ActivityType, Error, Output
